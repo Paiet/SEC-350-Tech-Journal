@@ -1,0 +1,16 @@
+---
+  - name: Installing ansible
+    hosts: util 
+    become: true
+    vars: 
+      httpd_service_state: started
+      httpd_service_enabled: yes
+    roles:
+    - web01-nicholas.httpd
+    tasks:
+    - name: Opening Firewall port 80
+      become: true
+      command: firewall-cmd --add-port=80/tcp --permanent
+    - name: Reloading firewall
+      become: true
+      command: firewall-cmd --reload
