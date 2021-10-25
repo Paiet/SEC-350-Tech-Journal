@@ -1,3 +1,6 @@
+#!/bin/vbash
+source /opt/vyatta/etc/functions/script-template
+configure
 #WAN-to-LAN
 #Rule 1
 Allow established connections
@@ -51,3 +54,6 @@ set firewall name DMZ-to-WAN rule 1 action accept
 Allow established connections
 set firewall name WAN-to-DMZ rule 1 action accept
 set firewall name WAN-to-DMZ rule 1 state established enable
+
+commit
+exit
