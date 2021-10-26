@@ -1,6 +1,6 @@
 #!/bin/vbash
 source /opt/vyatta/etc/functions/script-template
-configure
+config
 
 # MGMT-to-LAN
 # Rule 1
@@ -24,4 +24,3 @@ set firewall name LAN-to-MGMT rule 20 destination port 8089
 set firewall name LAN-to-MGMT rule 20 protocol tcp
 
 commit
-exit
