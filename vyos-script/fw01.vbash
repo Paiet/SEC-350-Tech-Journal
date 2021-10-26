@@ -2,9 +2,6 @@
 source /opt/vyatta/etc/functions/script-template
 configure
 set system host-name edge01-nicholas
-
-set protocols static route 10.0.17.0/24 next-hop 10.0.17.2
-
 commit
 save
 
@@ -33,6 +30,13 @@ set nat source rule 15 description “NAT FROM DMZ to LAN”
 set nat source rule 15 outbound-interface eth0
 set nat source rule 15 source address 172.16.150.0/24
 set nat source rule 15 translation address masquerade
+
+set nat destination rule 10 description "Port Forwartding HTTP From WAN to Web01"
+set nat destination rule 10 destination port 80
+set nat destination rule 10 inbound-interface eth0
+set nat destination rule 10 protocol tcp
+set nat destination rule 10 translation address 172.16.50.5
+commit
 
 # DNS fowarding
 set service dns forwarding listen-address 172.16.50.2
