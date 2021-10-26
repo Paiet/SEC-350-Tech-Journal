@@ -1,4 +1,4 @@
 wget https://raw.githubusercontent.com/Paiet/SYS-350-Tech-Journal/master/vyos-script/fw01.vbash
-wget https://raw.githubusercontent.com/Paiet/SYS-350-Tech-Journal/master/vyos-script/fw01-mgmt.bash
+wget https://raw.githubusercontent.com/Paiet/SYS-350-Tech-Journal/master/vyos-script/fw01-mgmt.vbash
 then
 chmod +x * or filename
