@@ -38,7 +38,7 @@ set nat destination rule 10 protocol tcp
 set nat destination rule 10 translation address 172.16.50.5
 commit
 
-set nat destination rule 20 description "PortFfrwarding RDP from WAN to SRV01"
+set nat destination rule 20 description "Port Forwarding RDP from WAN to SRV01"
 set nat destination rule 20 destination port 3389
 set nat destination rule 20 inbound-interface eth0
 set nat destination rule 20 protocol tcp
@@ -76,7 +76,7 @@ set firewall name DMZ-to-LAN rule 10 protocol udp
 allow traffic on 9997/tcp going to 10.0.5.10
 set firewall name DMZ-to-LAN rule 20 action accept
 set firewall name DMZ-to-LAN rule 20 destination address 10.0.5.10
-set firewall name DMZ-to-LAN rule 20 destination port 338
+set firewall name DMZ-to-LAN rule 20 destination port 3389
 set firewall name DMZ-to-LAN rule 20 protocol tcp
 
 # Rule 30
