@@ -41,8 +41,8 @@ commit
 # DNS fowarding
 set service dns forwarding listen-address 172.16.50.2
 set service dns forwarding allow-from 172.16.50.0/29
-set service DNS forwarding listen-address 172.16.150.2
-set service DNS forwarding allow-from 172.16.150.0/24
+set service dns forwarding listen-address 172.16.150.2
+set service dns forwarding allow-from 172.16.150.0/24
 commit
 save 
 
