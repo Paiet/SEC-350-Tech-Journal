@@ -65,10 +65,10 @@ set firewall name DMZ-to-LAN rule 1 action accept
 set firewall name DMZ-to-LAN rule 1 state established enable
 
 # Rule 10
-allow traffic on 514/udp going to 10.0.5.10
+allow traffic on 514/udp going to 172.16.50.5
 set firewall name DMZ-to-LAN rule 10 action accept
-set firewall name DMZ-to-LAN rule 10 description "Allow UDP/514 to syslog0101"
-set firewall name DMZ-to-LAN rule 10 destination address 10.0.5.10
+set firewall name DMZ-to-LAN rule 10 description "Allow UDP/514 to syslog01"
+set firewall name DMZ-to-LAN rule 10 destination address 172.16.50.5
 set firewall name DMZ-to-LAN rule 10 destination port 514
 set firewall name DMZ-to-LAN rule 10 protocol udp
 
