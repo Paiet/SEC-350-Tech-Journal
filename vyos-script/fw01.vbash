@@ -3,14 +3,19 @@ source /opt/vyatta/etc/functions/script-template
 configure
 set system host-name edge01-nicholas
 
+set protocols static route 10.0.17.0/24 next-hop 10.0.17.2
+
+commit
+save
+
 delete interfaces ethernet eth0 address dhcp
 set interfaces ethernet eth0 address [address]/[netmask]
 set interfaces ethernet eth1 address [address]/[netmask]
 set interfaces ethernet eth2 address [address]/[netmask]
 
-set interfaces ethernet eth0 description SEC350-WAN
-set interfaces ethernet eth1 description SEC350-DMZ
-set interfaces ethernet eth2 description SEC350-LAN
+set interfaces ethernet eth0 description EDGE01-WAN
+set interfaces ethernet eth1 description EDGE01-DMZ
+set interfaces ethernet eth2 description EDGE01-LAN
 commit
 
 # Place holder for net firewall
