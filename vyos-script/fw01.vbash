@@ -1,34 +1,70 @@
 #!/bin/vbash
 source /opt/vyatta/etc/functions/script-template
 configure
+set system host-name edge01-nicholas
+
+delete interfaces ethernet eth0 address dhcp
+set interfaces ethernet eth0 address [address]/[netmask]
+set interfaces ethernet eth1 address [address]/[netmask]
+set interfaces ethernet eth2 address [address]/[netmask]
+
+set interfaces ethernet eth0 description SEC350-WAN
+set interfaces ethernet eth1 description SEC350-DMZ
+set interfaces ethernet eth2 description SEC350-LAN
+commit
+
+# Place holder for net firewall
+
+set protocols static route 0.0.0.0/0 next-hop 10.0.17.2
+set system name-server 10.0.17.2
+commit
+
+set nat source rule 10 description "NAT FROM DMZ to WAN"
+set nat source rule 10 outbound-interface eth0
+set nat source rule 10 source address 172.16.50.0/29
+set nat source rule 10 translation address masquerade
+
+set nat source rule 15 description “NAT FROM DMZ to LAN”
+set nat source rule 15 outbound-interface eth0
+set nat source rule 15 source address 172.16.150.0/24
+set nat source rule 15 translation address masquerade
+
+# DNS fowarding
+set service dns forwarding listen-address 172.16.50.2
+set service dns forwarding allow-from 172.16.50.0/29
+set service DNS forwarding listen-address 172.16.150.2
+set service DNS forwarding allow-from 172.16.150.0/24
+commit
+save 
+
 #WAN-to-LAN
 #Rule 1
-Allow established connections
+allow established connections
 set firewall name WAN-to-LAN rule 1 action accept
 set firewall name WAN-to-LAN rule 1 state established enable
 
 # DMZ-to-LAN
 # Rule 1
-Allow established connections
+allow established connections
 set firewall name DMZ-to-LAN rule 1 action accept
 set firewall name DMZ-to-LAN rule 1 state established enable
 
 # Rule 10
-Allow traffic on 514/udp going to 10.0.5.10
+allow traffic on 514/udp going to 10.0.5.10
 set firewall name DMZ-to-LAN rule 10 action accept
 set firewall name DMZ-to-LAN rule 10 destination address 10.0.5.10
 set firewall name DMZ-to-LAN rule 10 destination port 514
 set firewall name DMZ-to-LAN rule 10 protocol udp
 
 # Rule 20
-Allow traffic on 9997/tcp going to 10.0.5.10
+allow traffic on 9997/tcp going to 10.0.5.10
 set firewall name DMZ-to-LAN rule 20 action accept
 set firewall name DMZ-to-LAN rule 20 destination address 10.0.5.10
 set firewall name DMZ-to-LAN rule 20 destination port 9997
 set firewall name DMZ-to-LAN rule 20 protocol tcp
 
 # Rule 30
-Allow traffic on 8089/tcp going to 10.0.5.10
+allow traffic on 8089/tcp going to 10.0.5.10
 set firewall name DMZ-to-LAN rule 30 action accept
 set firewall name DMZ-to-LAN rule 30 destination address 10.0.5.10
 set firewall name DMZ-to-LAN rule 30 destination port 8089
@@ -36,24 +72,43 @@ set firewall name DMZ-to-LAN rule 30 protocol tcp
 
 # LAN-to-DMZ
 # Rule 10
-Allow all
+allow all
 set firewall name LAN-to-DMZ rule 10 action accept
 
 # LAN-to-WAN
 # Rule 1
-Allow all
+allow all
 set firewall name LAN-to-WAN rule 1 action accept
 
 # DMZ-to-WAN
 # Rule 1
-Allow all
+allow all
 set firewall name DMZ-to-WAN rule 1 action accept
 
 # WAN-to-DMZ
 # Rule 1
-Allow established connections
+allow established connections
 set firewall name WAN-to-DMZ rule 1 action accept
 set firewall name WAN-to-DMZ rule 1 state established enable
 
 commit
+
+set zone-policy zone WAN interface eth0
+set zone-policy zone DMZ interface eth1
+set zone-policy zone LAN interface eth2
+commit
+
+# WAN-to-DMZ
+set firewall name WAN-to-DMZ default-action drop
+set firewall name WAN-to-DMZ enable-default-log
+set firewall name DMZ-to-WAN default-action drop
+set firewall name DMZ-to-WAN enable-default-log
+
+set zone-policy zone DMZ from WAN firewall name WAN-to-DMZ
+set zone-policy zone WAN from DMZ firewall name DMZ-to-WAN
+
+set system syslog host 172.16.50.5 facility authpriv level info commit
+set service ssh listen-address 10.0.17.12x
+commit
+
 exit
