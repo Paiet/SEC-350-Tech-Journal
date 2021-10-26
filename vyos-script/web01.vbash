@@ -2,10 +2,16 @@ sudo adduser nicholas
 passwd nicholas
 sudo usermod -aG wheel nicholas
 sudo -i nicholas
-firewall-cmd --add-port=80/tcp --permanent
+firewall-cmd --state
+firewall-cmd --zone=public --add-port=443/tcp --permanent
+firewall-cmd --zone=public --add-port=80/tcp --permanent
 firewall-cmd --reload
 firewall-cmd --list-all
 
 id
 ping -c 1 champlain.edu
 firewall-cmd --list-all
+
+sudo yum install httpd -y
+systemctl start httpd
+On web01 ensure that var/www/html/index.html exists
