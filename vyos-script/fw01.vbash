@@ -6,9 +6,9 @@ commit
 save
 
 delete interfaces ethernet eth0 address dhcp
-set interfaces ethernet eth0 address [address]/[netmask]
-set interfaces ethernet eth1 address [address]/[netmask]
-set interfaces ethernet eth2 address [address]/[netmask]
+set interfaces ethernet eth0 address 10.0.17.126/24
+set interfaces ethernet eth1 address 172.16.50.2/29
+set interfaces ethernet eth2 address 172.16.150.2/24
 
 set interfaces ethernet eth0 description EDGE01-WAN
 set interfaces ethernet eth1 description EDGE01-DMZ
