@@ -1,26 +1,32 @@
 #!/bin/vbash
 source /opt/vyatta/etc/functions/script-template
+
 config
-
-# MGMT-to-LAN
-# Rule 1
-allow all connections
-set firewall name MGMT-to-LAN rule 1 action accept
-
-# LAN-to-MGMT
-# Rule 1
-allow established connections
-set firewall name LAN-to-MGMT rule 1 action accept
-set firewall name LAN-to-MGMT rule 1 state established enable
-# Rule 10
-allow established connections
-set firewall name LAN-to-MGMT rule 10 action accept
-set firewall name LAN-to-MGMT rule 10 state established enable
-# Rule 1
-allow established connections
-set firewall name LAN-to-MGMT rule 20 action accept
-set firewall name LAN-to-MGMT rule 20 destination address 10.0.5.10
-set firewall name LAN-to-MGMT rule 20 destination port 8089
-set firewall name LAN-to-MGMT rule 20 protocol tcp
-
+set firewall name LAN-to-DMZ rule 30 action accept
+set firewall name LAN-to-DMZ rule 30 destination address 172.16.50.5 (web01)
+set firewall name LAN-to-DMZ rule 30 destination port 22
+set firewall name LAN-to-DMZ rule 30 protocol tcp
 commit
+save
+
+set firewall name LAN-to-DMZ rule 40 action accept
+set firewall name LAN-to-DMZ rule 40 description "DNS return"
+set firewall name LAN-to-DMZ rule 40 destination
+set firewall name LAN-to-DMZ rule 40 protocol tcp_udp
+set firewall name LAN-to-DMZ rule 40 source address 172.16.200.11
+set firewall name LAN-to-DMZ rule 40 source port 53
+
+set firewall name DMZ-to-LAN rule 40 action accept
+set firewall name DMZ-to-LAN rule 40 description "Outgoing DNS"
+set firewall name DMZ-to-LAN rule 40 destination address 172.16.200.11
+set firewall name DMZ-to-LAN rule 40 destination port 53
+set firewall name DMZ-to-LAN rule 40 protocol tcp_udp
+
+set service dns forwarding domain sec350.local
+set service dns forwarding domain sec350.local server 172.16.200.11
+
+set service ssh listen-address 10.0.17.120
+set service ssh listen-address 10.0.17.150
+set service ssh port 22
+commit
+save
