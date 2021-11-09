@@ -2,31 +2,23 @@
 source /opt/vyatta/etc/functions/script-template
 
 config
-set firewall name LAN-to-DMZ rule 30 action accept
-set firewall name LAN-to-DMZ rule 30 destination address 172.16.50.5 (web01)
-set firewall name LAN-to-DMZ rule 30 destination port 22
-set firewall name LAN-to-DMZ rule 30 protocol tcp
+set firewall name DMZ-to-LAN rule 45 action accept
+set firewall name DMZ-to-LAN rule 45 destination port 54
+set firewall name DMZ-to-LAN rule 45 protocol tcp_udp
+
+set firewall name DMZ-to-LAN rule 50 action accept
+set firewall name DMZ-to-LAN rule 50 destination address 172.16.50.5
+set firewall name DMZ-to-LAN rule 50 destination port 443
+set firewall name DMZ-to-LAN rule 50 protocol tcp_udp
 commit
-save
 
-set firewall name LAN-to-DMZ rule 40 action accept
-set firewall name LAN-to-DMZ rule 40 description "DNS return"
-set firewall name LAN-to-DMZ rule 40 destination
-set firewall name LAN-to-DMZ rule 40 protocol tcp_udp
-set firewall name LAN-to-DMZ rule 40 source address 172.16.200.11
-set firewall name LAN-to-DMZ rule 40 source port 53
+set firewall name DMZ-to-WAN rule 5 action accept
+set firewall name DMZ-to-WAN rule 5 destination port 80
+set firewall name DMZ-to-WAN rule 5 protocol tcp
 
-set firewall name DMZ-to-LAN rule 40 action accept
-set firewall name DMZ-to-LAN rule 40 description "Outgoing DNS"
-set firewall name DMZ-to-LAN rule 40 destination address 172.16.200.11
-set firewall name DMZ-to-LAN rule 40 destination port 53
-set firewall name DMZ-to-LAN rule 40 protocol tcp_udp
-
-set service dns forwarding domain sec350.local
-set service dns forwarding domain sec350.local server 172.16.200.11
-
-set service ssh listen-address 10.0.17.120
-set service ssh listen-address 10.0.17.150
-set service ssh port 22
+set firewall name LAN-to-DMZ rule 50 action accept
+set firewall name LAN-to-DMZ rule 50 destination address 172.16.50.5
+set firewall name LAN-to-DMZ rule 50 destination port 443
+set firewall name LAN-to-DMZ rule 50 protocol tcp_udp
 commit
 save
