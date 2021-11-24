@@ -7,8 +7,8 @@ set interfaces openvpn vtun0 mode server
 set interfaces openvpn vtun0 persistent-tunnel
 set interfaces openvpn vtun0 protocol udp
 set interfaces openvpn vtun0 server push-route 172.16.150.0/24
-set interfaces openvpn vtun0 server subnet 172.16.99.8/24
-set interfaces openvpn vtun0 tls ca-cert-file /config/auth/cacert.pem
+set interfaces openvpn vtun0 server subnet 172.16.99.0/24
+set interfaces openvpn vtun0 tls ca-cert-file /config/auth/cacert.pub
 set interfaces openvpn vtun0 tls cert-file /config/auth/fw1-nicholas.cert
 set interfaces openvpn vtun0 tls dh-file /config/auth/dh2048.pem
 set interfaces openvpn vtun0 tis key-file /config/auth/fw1-nicholas.key
