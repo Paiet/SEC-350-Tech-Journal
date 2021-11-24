@@ -1,0 +1,39 @@
+#!/bin/vbash
+source /opt/vyatta/etc/functions/script-template
+configure
+
+set interfaces openvpn vtun0
+set interfaces openvpn vtun0 mode server
+set interfaces openvpn vtun0 persistent-tunnel
+set interfaces openvpn vtun0 protocol udp
+set interfaces openvpn vtun0 server push-route 172.16.150.0/24
+set interfaces openvpn vtun0 server subnet 172.16.99.8/24
+set interfaces openvpn vtun0 tls ca-cert-file /config/auth/cacert.pem
+set interfaces openvpn vtun0 tls cert-file /config/auth/fw1-nicholas.cert
+set interfaces openvpn vtun0 tls dh-file /config/auth/dh2048.pem
+set interfaces openvpn vtun0 tis key-file /config/auth/fw1-nicholas.key
+commit
+save
+
+set firewall name VPN-to-LAN default-action drop
+set firewall name VPN-to-LAN enable-default-log
+set firewall name LAN-to-VPN default-action drop
+set firewall name LAN-to-VPN enable-default-log
+set firewall name DMZ-to-VPN default-action drop
+set firewall name DM2-to-VPN enable-default-log
+set firewall name VPN-to-DMZ default-action drop
+set firewall name VPN-to-DMZ enable-default-log
+Commit
+save
+set zone-policy zone DMZ from LAN firewall name WAN-to-DMZ
+set zone-policy zone LAN from DMZ firewall name DMZ-to-WAN
+set zone-policy zone VPN from LAN firewall name LAN-to-VPN
+set zone-policy zone LAN from VPN firewall name VPN-to-LAN
+commit
+set zone-policy zone WAN interface eth0
+set zone-policy zone DMZ interface eth1
+set zone-policy zone LAN interface eth2
+set zone-policy zone VPN interface vtun0
+commit
+save
+exit
