@@ -1,1 +1,1 @@
-# SYS-350-Tech-Journal
+# SEC-350-Tech-Journal
