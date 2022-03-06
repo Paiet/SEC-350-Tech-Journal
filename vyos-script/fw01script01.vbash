@@ -15,8 +15,6 @@ set interfaces ethernet eth1 description EDGE01-DMZ
 set interfaces ethernet eth2 description EDGE01-LAN
 commit
 
-# Place holder for net firewall
-
 set protocols static route 0.0.0.0/0 next-hop 10.0.17.2
 set system name-server 10.0.17.2
 commit
