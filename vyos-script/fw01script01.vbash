@@ -1,0 +1,34 @@
+#!/bin/vbash
+source /opt/vyatta/etc/functions/script-template
+configure
+set system host-name edge01-nicholas
+commit
+save
+
+delete interfaces ethernet eth0 address dhcp
+set interfaces ethernet eth0 address 10.0.17.147/24
+set interfaces ethernet eth1 address 172.16.50.2/29
+set interfaces ethernet eth2 address 172.16.150.2/24
+
+set interfaces ethernet eth0 description EDGE01-WAN
+set interfaces ethernet eth1 description EDGE01-DMZ
+set interfaces ethernet eth2 description EDGE01-LAN
+commit
+
+# Place holder for net firewall
+
+set protocols static route 0.0.0.0/0 next-hop 10.0.17.2
+set system name-server 10.0.17.2
+commit
+
+set nat source rule 10 description "NAT FROM DMZ to WAN"
+set nat source rule 10 outbound-interface eth0
+set nat source rule 10 source address 172.16.50.0/29
+set nat source rule 10 translation address masquerad
+commit
+
+set protocols static route 0.0.0.0/0 next-hop 10.0.17.2
+set system name-server 10.0.17.2
+commit
+save
+exit
